@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -19,15 +20,15 @@ public class MyView3 extends View {
     Paint textPaint;
     int w=0;
     int degrees;
-    int polygonNum=1;
+    int polygonNum=9;
     int steps=5;
     double arc;
-    int lineWidth=300;
+    int lineWidth=200;
     float demoValue[]={0.8f,0.5f,0.1f,0.63f,0.8f,0.9F};
+    String texts []=new String[]{"观察力","观察力","观察力","观察力","观察力","观察力","观察力","观察力","观察力"};
     public MyView3(Context context) {
         super(context);
     }
-
     public MyView3(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -99,7 +100,45 @@ public class MyView3 extends View {
                     path.lineTo(pointF.x,pointF.y);
                 }
                 if(p==1){
-                    canvas.drawText("1111",pointF.x,pointF.y,textPaint);
+                    Paint.FontMetrics fontMetrics = textPaint.getFontMetrics();
+
+                    Rect rect = new Rect();
+                    textPaint.getTextBounds(texts[j],0,texts[j].length(), rect);
+                    float fontHeight = rect.height();
+                    double angle=j*degrees;
+                    if(angle==0||angle==360){//第一象限
+                        canvas.drawText(texts[j], pointF.x,pointF.y+fontHeight/4,textPaint);
+                    }else if(angle>0&&angle<=90){//第二象限
+                        canvas.drawText(texts[j], pointF.x,pointF.y+fontHeight,textPaint);
+                    }else if(angle>90&&angle<180){
+                        float dis = textPaint.measureText(texts[j]);//文本长度
+                        canvas.drawText(texts[j], pointF.x-dis,pointF.y+fontHeight,textPaint);
+                    }else if(angle==180){
+                        float dis = textPaint.measureText(texts[j]);//文本长度
+                        canvas.drawText(texts[j], pointF.x-dis,pointF.y+fontHeight/4,textPaint);
+                    }else if(angle>180&&angle<=270){
+                        float dis = textPaint.measureText(texts[j]);//文本长度
+                        canvas.drawText(texts[j], pointF.x-dis,pointF.y,textPaint);
+                    }else if(angle>270&&angle<360){
+                        float dis = textPaint.measureText(texts[j]);//文本长度
+                        canvas.drawText(texts[j], pointF.x,pointF.y,textPaint);
+                    }
+
+
+
+//                    if(angle>=0&&angle<=90){//第1象限
+//                        canvas.drawText(texts[j], pointF.x,pointF.y+fontHeight/4,textPaint);
+//                    }else if(angle>90&&angle<=180){//第2象限
+//                        canvas.drawText(texts[j], pointF.x,pointF.y+fontHeight/4,textPaint);
+//                    }else if(angle>180&&angle<=270){//第3象限
+//                        float dis = textPaint.measureText(texts[j]);//文本长度
+//                        canvas.drawText(texts[j], pointF.x-dis,pointF.y-fontHeight/4,textPaint);
+//                    }else if(angle>270&&angle<=360){//第1象限
+//                        float dis = textPaint.measureText(texts[j]);//文本长度
+//                        canvas.drawText(texts[j], pointF.x-dis,pointF.y-fontHeight/4,textPaint);
+//                    }
+
+
                 }
 
             }
@@ -152,10 +191,20 @@ public class MyView3 extends View {
         PointF point=new PointF();
         point.x= (float) (Math.cos(index*arc)*lineWidth*value);
         point.y= (float) (Math.sin(index*arc)*lineWidth*value);
-
-
         return point;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
